@@ -1,0 +1,12 @@
+[submodule "salt/formulas/mysql-formula"]
+	path = salt/formulas/mysql-formula
+	url = https://github.com/aidanharris/mysql-formula.git
+[submodule "salt/formulas/php-formula"]
+	path = salt/formulas/php-formula
+	url = https://github.com/aidanharris/php-formula.git
+[submodule "salt/formulas/nginx-formula"]
+	path = salt/formulas/nginx-formula
+	url = https://github.com/aidanharris/nginx-formula.git
+[submodule "letsencrypt"]
+	path = letsencrypt
+	url = https://github.com/letsencrypt/letsencrypt.git
