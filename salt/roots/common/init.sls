@@ -1,6 +1,6 @@
 include:
   - common.packages
-
+  - common.locale
 {% if pillar['salt_env'] == 'development' %}
 # Set SELinux to permissive in a development environment - i.e monitor but don't enforce
 {% if pillar['selinux'] and salt['file.file_exists']('/etc/selinux/config') %}
