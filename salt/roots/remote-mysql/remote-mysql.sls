@@ -1,3 +1,4 @@
+{% from "firewall/disable-firewall.jinja" import firewall with context %}
 {% if pillar['salt_env'] == 'development' %}
 {% set root_password=pillar['mysql']['server']['root_password'] %}
 create_remote_root_user:
@@ -16,6 +17,7 @@ restart_mysqld:
   module.run:
     - name: service.restart
     - m_name: {{pillar['mysql']['lookup']['service']}}
+{% if firewall.disabled == False %}
 allow_remote_access:
   {% if pillar['firewall'] == 'firewalld' %}
   service.running:
@@ -32,6 +34,7 @@ allow_remote_access:
         sudo ufw allow mysql
         sudo ufw reload
   {% endif %}
+{% endif %}
 {% else %}
 refusing_to_run_in_production_environment:
   cmd.run:

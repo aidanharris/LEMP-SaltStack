@@ -39,7 +39,6 @@ Vagrant.configure('2') do |config|
   # the RedHat family such as CentOS or RHEL. Fedora 25 is used by default since
   # batteries are included (no third-party repos need to be added).
   #config.vm.box = 'centos/7'
-  config.vm.box = 'boxcutter/centos73'
   #config.vm.box = 'fedora/25-cloud-base'
 
   # Disable automatic box update checking. If you disable this, then
@@ -64,36 +63,12 @@ Vagrant.configure('2') do |config|
 
   config.vm.hostname = "www.localdomain"
 
-  # Install the vagrant-hostmanager plugin (https://github.com/devopsgroup-io/vagrant-hostmanager)
-  # to update your hosts file automatically (assuming your using VirtualBox)
-  if Vagrant.has_plugin?("vagrant-hostmanager")
-    config.hostmanager.ip_resolver = proc do |vm, resolving_vm|
-      if vm.id
-        # Work around weird bug with either CentOS, Vagrant, or Virtualbox (not sure which) whereby interfaces
-        # eth0 and eth1 change between `vagrant up` and `vagrant halt`
-        if `if [[ -z "$DIGITALOCEAN_TOKEN" ]]; then printf "True"; fi` == "True"
-          if `VBoxManage guestproperty get #{vm.id} "/VirtualBox/GuestInfo/Net/1/V4/IP"`.split()[1][0..1] === '10'
-            `VBoxManage guestproperty get #{vm.id} "/VirtualBox/GuestInfo/Net/0/V4/IP"`.split()[1]
-          else
-            `VBoxManage guestproperty get #{vm.id} "/VirtualBox/GuestInfo/Net/1/V4/IP"`.split()[1]
-          end
-        end
-      end
-    end
-
-    config.hostmanager.enabled = true
-    config.hostmanager.manage_host = true
-    config.hostmanager.ignore_private_ip = false
-    config.hostmanager.include_offline = true
-    config.hostmanager.aliases = [ "www.localdomain" ]
-  end
-
   # Share an additional folder to the guest VM. The first argument is
   # the path on the host to the actual folder. The second argument is
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
   config.vm.synced_folder ".", "/vagrant", disabled: true
-  config.vm.synced_folder '.pkgcache', '/var/cache/yum/x86_64/7'
+  config.vm.synced_folder '.pkgcache', '/var/cache/yum/x86_64/7', disabled: false, owner: 'root', group: 'root'
   config.vm.synced_folder 'salt/conf', '/tmp/salt/conf'
   config.vm.synced_folder 'salt/roots/', '/srv/salt/'
   config.vm.synced_folder 'salt/pillar', '/srv/pillar'
@@ -115,7 +90,33 @@ Vagrant.configure('2') do |config|
   # backing providers for Vagrant. These expose provider-specific options.
   # Example for VirtualBox:
   #
-  config.vm.provider "virtualbox" do |vb|
+  config.vm.provider "virtualbox" do |vb,override|
+    override.vm.box = 'boxcutter/centos73'
+    # Install the vagrant-hostmanager plugin (https://github.com/devopsgroup-io/vagrant-hostmanager)
+    # to update your hosts file automatically (assuming your using VirtualBox)
+    if Vagrant.has_plugin?("vagrant-hostmanager")
+      override.hostmanager.ip_resolver = proc do |vm, resolving_vm|
+      if vm.id
+        # Work around weird bug with either CentOS, Vagrant, or Virtualbox (not sure which) whereby interfaces
+        # eth0 and eth1 change between `vagrant up` and `vagrant halt`
+        if `if [[ -z "$DIGITALOCEAN_TOKEN" ]]; then printf "True"; fi` == "True"
+          if `VBoxManage guestproperty get #{vm.id} "/VirtualBox/GuestInfo/Net/1/V4/IP"`.split()[1][0..1] === '10'
+            `VBoxManage guestproperty get #{vm.id} "/VirtualBox/GuestInfo/Net/0/V4/IP"`.split()[1]
+          else
+            `VBoxManage guestproperty get #{vm.id} "/VirtualBox/GuestInfo/Net/1/V4/IP"`.split()[1]
+          end
+        end
+      end
+    end
+
+    override.hostmanager.enabled = true
+    override.hostmanager.manage_host = true
+    override.hostmanager.ignore_private_ip = false
+    override.hostmanager.include_offline = true
+    override.hostmanager.aliases = [ "www.localdomain" ]
+  end
+
+
     # Display the VirtualBox GUI when booting the machine
     vb.gui = false
     # Number of CPU cores / 2 e.g a system with 8 cores will allocate 4
@@ -124,6 +125,37 @@ Vagrant.configure('2') do |config|
     # Customize the amount of memory on the VM:
     vb.memory = DEFAULT_RAM_AMOUNT
   end
+
+  config.vm.provider "docker" do |docker, override|
+    # Install the vagrant-hostmanager plugin (https://github.com/devopsgroup-io/vagrant-hostmanager)
+    # to update your hosts file automatically (assuming your using VirtualBox)
+    if Vagrant.has_plugin?("vagrant-hostmanager")
+        override.hostmanager.ip_resolver = proc do |vm, resolving_vm|
+          if vm.id
+            `sudo -E docker inspect #{vm.id} | grep -ohE '"IPAddress": ".*"' | head -n1 | sed 's/.*: //g' | cut -c2- | rev | cut -c2- | rev`
+          end
+        end
+
+      override.hostmanager.enabled = true
+      override.hostmanager.manage_host = true
+      override.hostmanager.ignore_private_ip = false
+      override.hostmanager.include_offline = true
+      override.hostmanager.aliases = [ "www.localdomain" ]
+    end
+    docker.image = "local/c7-systemd-vagrant"
+    docker.create_args = [
+      "-d",
+      "--rm",
+      "--privileged"
+    ]
+    docker.remains_running = true
+    docker.has_ssh = true
+    docker.volumes = [
+      "/sys/fs/cgroup:/sys/fs/cgroup:ro",
+      "/var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket"
+    ]
+  end
+
 
   # Deploy to DigitalOcean (https://github.com/devopsgroup-io/vagrant-digitalocean)
   config.vm.provider :digital_ocean do |digitalocean, override|

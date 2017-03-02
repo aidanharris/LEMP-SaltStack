@@ -1,0 +1,9 @@
+{% set firewall = salt['grains.filter_by'] ({
+  'Docker': {
+    'disabled': True
+  },
+  'Default': {
+    'disabled': False
+  },
+}, grain='virtual_subtype', default='Default', merge=salt['pillar.get']('firewall:lookup')
+) %}

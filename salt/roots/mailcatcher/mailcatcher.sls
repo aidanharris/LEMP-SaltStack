@@ -1,3 +1,4 @@
+{% from "firewall/disable-firewall.jinja" import firewall with context %}
 {% if pillar['salt_env'] == 'development' %}
 # This probably won't work on other OS's due to different packages.
 # To Do:
@@ -17,6 +18,7 @@ mailcatcher_install:
   cmd.run:
     - name: |
         gem install mailcatcher
+{% if firewall.disabled == False %}
 mailcatcher_allow_web_access:
 {% if pillar['firewall'] == 'firewalld' %}
   service.running:
@@ -26,6 +28,7 @@ mailcatcher_allow_web_access:
         firewall-cmd --permanent --zone=public --add-port=1080/tcp
         firewall-cmd --permanent --zone=public --add-port=1025/tcp
         firewall-cmd --reload
+{% endif %}
 {% endif %}
 mailcatcher_copy_systemd_unit:
   cmd.run:

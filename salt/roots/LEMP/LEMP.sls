@@ -1,3 +1,4 @@
+{% from "firewall/disable-firewall.jinja" import firewall with context %}
 include:
   - mysql
   - remote-mysql
@@ -26,6 +27,7 @@ enable_nginx:
   service.running:
     - name: nginx
     - enable: True
+{% if firewall.disabled == False %}
 allow_web_access:
   {% if pillar['firewall'] == 'firewalld' %}
   service.running:
@@ -44,3 +46,4 @@ allow_web_access:
         sudo ufw allow https
         sudo ufw reload
   {% endif %}
+{% endif %}
