@@ -6,6 +6,7 @@ An opinionated LEMP stack for use with Vagrant as a local dev environment.
 * Support for both Debian and RedHat based OS's
 * Docker provider support (See: [c7-systemd-vagrant](https://github.com/aidanharris/c7-systemd-vagrant))
 * A full LEMP stack comprised of Linux, Nginx, MariaDB and PHP
+* [Symfony](https://symfony.com/) - See the [symfony branch](https://github.com/aidanharris/LEMP-SaltStack/tree/symfony)
 * [Composer](https://getcomposer.org/)
 * [Mailcatcher](https://mailcatcher.me/)
 * [Redis](https://redis.io/) and [phpiredis](https://github.com/nrk/phpiredis) - This is the default for PHP session storage
