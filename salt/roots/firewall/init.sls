@@ -1,11 +1,18 @@
 {% from "firewall/disable-firewall.jinja" import firewall with context %}
-{% if firewall.disabled == False %}
-{% set firewall = {
+
+{% set pkg = {
   'RedHat': 'firewalld',
   'Debian': 'ufw',
   'Arch': 'ufw'
 }.get(grains.os_family) %}
 
+{% if firewall.disabled == False %}
 include:
-  - firewall.{{ firewall }}
+  - firewall.{{ pkg }}
+{% else %}
+disable_firewall:
+  module.run:
+    - name: service.disabled
+    - m_name: service.disabled
+    - kwargs: {{ pkg }}
 {% endif %}
