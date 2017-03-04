@@ -20,15 +20,11 @@ restart_mysqld:
 {% if firewall.disabled == False %}
 allow_remote_access:
   {% if pillar['firewall'] == 'firewalld' %}
-  service.running:
-    - name: firewalld
   cmd.run:
     - name: |
         sudo firewall-cmd --permanent --zone=public --add-port 3306/tcp
         sudo firewall-cmd --reload
   {% elif pillar['firewall'] == 'ufw' %}
-  service.running:
-    - name: ufw
   cmd.run:
     - name: |
         sudo ufw allow mysql

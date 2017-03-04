@@ -30,16 +30,12 @@ enable_nginx:
 {% if firewall.disabled == False %}
 allow_web_access:
   {% if pillar['firewall'] == 'firewalld' %}
-  service.running:
-    - name: firewalld
   cmd.run:
     - name: |
         sudo firewall-cmd --add-service=http --zone=public --permanent
         sudo firewall-cmd --add-service=https --zone=public --permanent
         sudo firewall-cmd --reload
   {% elif pillar['firewall'] == 'ufw' %}
-  service.running:
-    - name: ufw
   cmd.run:
     - name: |
         sudo ufw allow http

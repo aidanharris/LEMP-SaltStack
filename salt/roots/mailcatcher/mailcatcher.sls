@@ -21,13 +21,17 @@ mailcatcher_install:
 {% if firewall.disabled == False %}
 mailcatcher_allow_web_access:
 {% if pillar['firewall'] == 'firewalld' %}
-  service.running:
-    - name: firewalld
   cmd.run:
     - name: |
         firewall-cmd --permanent --zone=public --add-port=1080/tcp
         firewall-cmd --permanent --zone=public --add-port=1025/tcp
         firewall-cmd --reload
+{% elif pillar['firewall'] == 'ufw' %}
+  cmd.run:
+    - name: |
+        ufw allow 1080/tcp
+        ufw allow 1025/tcp
+        ufw reload
 {% endif %}
 {% endif %}
 mailcatcher_copy_systemd_unit:
