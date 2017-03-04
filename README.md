@@ -15,11 +15,15 @@ An opinionated LEMP stack for use with Vagrant as a local dev environment.
 
 ### Docker
 
+```bash
 sudo -E vagrant up --provider docker # Sudo is needed to run docker commands as root
+```
 
 ### VirtualBox
 
+```bash
 vagrant up --provider virtualbox
+```
 
 ### Others
 
