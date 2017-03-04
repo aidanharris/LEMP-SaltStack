@@ -7,7 +7,7 @@ PKG_CACHE = '.pkgcache'
 
 Dir.mkdir(PKG_CACHE) unless File.exists?(PKG_CACHE)
 
-# Create prviate directories if they don't exist so shared folders doesn't fail
+# Create private directories if they don't exist so shared folders don't fail
 Dir.mkdir('.private') unless Dir.exists?('.private')
 Dir.mkdir('.private/letsencrypt-etc/') unless Dir.exists?('.private/letsencrypt-etc/')
 
@@ -68,7 +68,7 @@ Vagrant.configure('2') do |config|
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
   config.vm.synced_folder ".", "/vagrant", disabled: true
-  config.vm.synced_folder '.pkgcache', '/var/cache/yum/x86_64/7', disabled: false, owner: 'root', group: 'root'
+  config.vm.synced_folder '.pkgcache', '/var/cache/yum/x86_64/7', owner: 'root', group: 'root'
   config.vm.synced_folder 'salt/conf', '/tmp/salt/conf'
   config.vm.synced_folder 'salt/roots/', '/srv/salt/'
   config.vm.synced_folder 'salt/pillar', '/srv/pillar'
@@ -93,29 +93,25 @@ Vagrant.configure('2') do |config|
   config.vm.provider "virtualbox" do |vb,override|
     override.vm.box = 'boxcutter/centos73'
     # Install the vagrant-hostmanager plugin (https://github.com/devopsgroup-io/vagrant-hostmanager)
-    # to update your hosts file automatically (assuming your using VirtualBox)
+    # to update your hosts file automatically
     if Vagrant.has_plugin?("vagrant-hostmanager")
       override.hostmanager.ip_resolver = proc do |vm, resolving_vm|
-      if vm.id
+        if vm.id
         # Work around weird bug with either CentOS, Vagrant, or Virtualbox (not sure which) whereby interfaces
         # eth0 and eth1 change between `vagrant up` and `vagrant halt`
-        if `if [[ -z "$DIGITALOCEAN_TOKEN" ]]; then printf "True"; fi` == "True"
           if `VBoxManage guestproperty get #{vm.id} "/VirtualBox/GuestInfo/Net/1/V4/IP"`.split()[1][0..1] === '10'
             `VBoxManage guestproperty get #{vm.id} "/VirtualBox/GuestInfo/Net/0/V4/IP"`.split()[1]
           else
             `VBoxManage guestproperty get #{vm.id} "/VirtualBox/GuestInfo/Net/1/V4/IP"`.split()[1]
           end
         end
+        override.hostmanager.enabled = true
+        override.hostmanager.manage_host = true
+        override.hostmanager.ignore_private_ip = false
+        override.hostmanager.include_offline = true
+        override.hostmanager.aliases = [ "www.localdomain" ]
       end
     end
-
-    override.hostmanager.enabled = true
-    override.hostmanager.manage_host = true
-    override.hostmanager.ignore_private_ip = false
-    override.hostmanager.include_offline = true
-    override.hostmanager.aliases = [ "www.localdomain" ]
-  end
-
 
     # Display the VirtualBox GUI when booting the machine
     vb.gui = false
@@ -130,11 +126,11 @@ Vagrant.configure('2') do |config|
     # Install the vagrant-hostmanager plugin (https://github.com/devopsgroup-io/vagrant-hostmanager)
     # to update your hosts file automatically (assuming your using VirtualBox)
     if Vagrant.has_plugin?("vagrant-hostmanager")
-        override.hostmanager.ip_resolver = proc do |vm, resolving_vm|
-          if vm.id
-            `sudo -E docker inspect #{vm.id} | grep -ohE '"IPAddress": ".*"' | head -n1 | sed 's/.*: //g' | cut -c2- | rev | cut -c2- | rev`
-          end
+      override.hostmanager.ip_resolver = proc do |vm, resolving_vm|
+        if vm.id
+          `sudo -E docker inspect #{vm.id} | grep -ohE '"IPAddress": ".*"' | head -n1 | sed 's/.*: //g' | cut -c2- | rev | cut -c2- | rev`
         end
+      end
 
       override.hostmanager.enabled = true
       override.hostmanager.manage_host = true
