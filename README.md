@@ -39,4 +39,4 @@ You can use this state to get started immediatly as follows:
 
 `salt-call state.apply symfony.sample_project`
 
-After running the above command and following the presented instructions you can point your browser at the IP address of the machine in question since nginx is configured as a reverse proxy (See: [salt/pillar/nginx-dev.sls](https://github.com/aidanharris/LEMP-SaltStack/blob/symfony/salt/pillar/nginx-dev.sls))
+After running the above command and following the presented instructions you can point your browser at the IP address of the machine in question since nginx is configured as a reverse proxy (See: [salt/pillar/nginx-dev.sls](https://github.com/aidanharris/LEMP-SaltStack/blob/symfony/salt/pillar/nginx-dev.sls#L110-L114))
