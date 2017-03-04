@@ -29,6 +29,9 @@ php:
         PHP:
           display_errors: On
           display_startup_errors: On
+          # pcntl_fork has been removed from the disabled functions as Symfony needs it
+          # If you do not need to use this function you may consider adding it back!
+          disable_functions: pcntl_alarm,pcntl_waitpid,pcntl_wait,pcntl_wifexited,pcntl_wifstopped,pcntl_wifsignaled,pcntl_wexitstatus,pcntl_wtermsig,pcntl_wstopsig,pcntl_signal,pcntl_signal_dispatch,pcntl_get_last_error,pcntl_strerror,pcntl_sigprocmask,pcntl_sigwaitinfo,pcntl_sigtimedwait,pcntl_exec,pcntl_getpriority,pcntl_setpriority
           {% if mailcatcher %}
           sendmail_path: /usr/local/bin/catchmail -f mail@localhost
           {% endif %}

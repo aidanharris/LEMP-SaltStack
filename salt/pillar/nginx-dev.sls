@@ -91,19 +91,6 @@ nginx:
               - ssl_stapling_verify: "on"
               - add_header: Strict-Transport-Security "max-age=15768000; includeSubDomains" always
               - root: /var/www
-              - index:
-                - index.php
-                - index.html
-                - index.htm
-              - location ~* \.(?:svg|gif|png|html|css|js|ttf|woff|ico|jpg|jpeg)$:
-                - try_files: $uri $uri/ =404
-              - location ~ /(docs):
-                - try_files: $uri $uri/ =404
-              - location ~ \.php$:
-                - fastcgi_split_path_info: ^(.+\.php)(/.+)$
-                - fastcgi_pass: unix:/run/php-fpm/php{{ phpVersion }}-fpm.sock
-                - fastcgi_index: index.php
-                - include: fastcgi.conf
               - location /phpMyAdmin:
                 - root: /usr/share/
                 - index: index.php
@@ -118,13 +105,10 @@ nginx:
                   - root: /usr/share/
               - location /phpmyadmin:
                 - rewrite: ^/* /phpMyAdmin last
-          # The above outputs:
-          # server {
-          #    server_name localhost;
-          #    listen 80 default_server;
-          #    index index.html index.htm;
-          #    location ~ .htm {
-          #        try_files $uri $uri/ =404;
-          #        test something else;
-          #    }
-          # }
+              # Reverse-Proxy to the php development server
+              # In production use this instead (https://symfony.com/doc/current/setup/web_server_configuration.html)
+              - location /:
+                - proxy_set_header: X-Real-IP  $remote_addr
+                - proxy_set_header: X-Forwarded-For $remote_addr
+                - proxy_set_header: Host $host
+                - proxy_pass: http://127.0.0.1:8000
