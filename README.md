@@ -19,6 +19,8 @@ An opinionated LEMP stack for use with Vagrant as a local dev environment.
 sudo -E vagrant up --provider docker # Sudo is needed to run docker commands as root
 ```
 
+Note: You'll need to prefix all other vagrant commands (e.g `vagrant provision`) with `sudo -E` too, since you'll get "permission denied" errors if you don't execute the commands as root.
+
 ### VirtualBox
 
 ```bash
