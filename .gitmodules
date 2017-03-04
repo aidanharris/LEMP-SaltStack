@@ -10,3 +10,6 @@
 [submodule "letsencrypt"]
 	path = letsencrypt
 	url = https://github.com/letsencrypt/letsencrypt.git
+[submodule "certbot"]
+	path = certbot
+	url = https://github.com/certbot/certbot
