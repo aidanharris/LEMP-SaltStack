@@ -4,7 +4,7 @@ create_project:
   cmd.run:
     - name: |
         /usr/local/bin/symfony new {{ project }}
-        cd myProject
+        cd {{ project }}
         sed -i 's/^    header(/    \/\/header(/g' /var/www/{{ project }}/web/app_dev.php
         sed -i 's/^    exit(/    \/\/exit(/g' /var/www/{{ project }}/web/app_dev.php
     - cwd: /var/www
