@@ -8,5 +8,6 @@ base:
     - redis.redis
     - phpiredis.phpiredis
     - composer
+    - symfony.symfony
     - phpMyAdmin.phpMyAdmin
     - mailcatcher
