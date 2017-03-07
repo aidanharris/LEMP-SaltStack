@@ -39,6 +39,10 @@ vagrant up --provider virtualbox
 
 Other vagrant providers should work in theory, but are untested. If you have had success using another provider, you are welcome to submit any changes as a pull request.
 
+## Contributing
+
+The master branch should always be "minimal". By this I mean it should only contain the essentials to get a LEMP stack up and running and work on a barebones PHP project. Other branches should track master and provide changes for specific frameworks for example the [symfony branch](https://github.com/aidanharris/LEMP-SaltStack/tree/symfony).
+
 ## To Do:
 
 - [ ] Describe LetsEncrypt Integration (or lack of)
