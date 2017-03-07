@@ -14,6 +14,13 @@ An opinionated LEMP stack for use with Vagrant as a local dev environment.
 
 ## Usage
 
+Clone the repo:
+
+```bash
+git clone --recursive https://github.com/aidanharris/LEMP-SaltStack LEMP-SaltStack
+cd LEMP-SaltStack
+```
+
 ### Docker
 
 ```bash
