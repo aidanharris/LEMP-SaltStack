@@ -38,7 +38,7 @@ Once the environment is up and running the Symfony CLI tool is located at `/usr/
 
 #### Creating a project
 
-You can create a new project using the `symfony new project_name`
+You can create a new project using `symfony new project_name`
 
 In addition to the above there is also a sample salt state located in the [salt/roots/symfony](https://github.com/aidanharris/LEMP-SaltStack/blob/symfony/salt/roots/symfony) directory (See: [sample_project.sls](https://github.com/aidanharris/LEMP-SaltStack/blob/symfony/salt/roots/symfony/sample_project.sls))
 
