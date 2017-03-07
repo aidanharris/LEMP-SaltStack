@@ -5,6 +5,13 @@ An opinionated LEMP stack for use with Vagrant as a local dev environment.
 
 ### Usage
 
+Checkout the symfony branch:
+
+```bash
+cd LEMP-SaltStack
+git checkout symfony
+```
+
 Bring the environment up as usual using Vagrant:
 
 #### Docker
