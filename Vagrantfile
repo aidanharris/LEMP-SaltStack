@@ -141,7 +141,7 @@ Vagrant.configure('2') do |config|
     docker.image = "local/c7-systemd-vagrant"
     docker.create_args = [
       "-d",
-      "--rm",
+      #"--rm",
       "--privileged"
     ]
     docker.remains_running = true
