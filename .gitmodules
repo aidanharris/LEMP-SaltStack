@@ -16,3 +16,4 @@
 [submodule "salt/formulas/wordpress-formula"]
 	path = salt/formulas/wordpress-formula
 	url = https://github.com/aidanharris/wordpress-formula
+	branch = allow-root
