@@ -5,17 +5,20 @@ create_remote_root_user:
   cmd.run:
     - name: |
         mysql -uroot -p'{{root_password}}' --execute="CREATE USER 'root'@'%' IDENTIFIED BY '{{root_password}}';"
-    - check_cmd: /bin/true
+    - check_cmd:
+      - /bin/true
 grant_all_privileges_to_remote_root_user:
   cmd.run:
     - name: |
         mysql -uroot -p'{{root_password}}' --execute="GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;"
-    - check_cmd: /bin/true
+    - check_cmd: 
+      - /bin/true
 flush_mysql_privileges:
   cmd.run:
     - name: |
         mysql -uroot -p'{{root_password}}' --execute="FLUSH PRIVILEGES;"
-    - check_cmd: /bin/true
+    - check_cmd:
+      - /bin/true
 restart_mysqld:
   module.run:
     - name: service.restart
