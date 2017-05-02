@@ -525,6 +525,7 @@ file_roots:
     - /srv/formulas/php-formula
     - /srv/formulas/mysql-formula
     - /srv/formulas/redis-formula
+    - /srv/formulas/wordpress-formula
 
 # Uncomment the line below if you do not want the file_server to follow
 # symlinks when walking the filesystem tree. This is set to True

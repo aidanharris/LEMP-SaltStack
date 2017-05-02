@@ -6,5 +6,6 @@ mysql:
       bind-address: 0.0.0.0
   database:
     - www
+    - wordpress
   lookup:
     service: 'mariadb'

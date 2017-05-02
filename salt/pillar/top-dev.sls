@@ -5,3 +5,4 @@ base:
     - php
     - nginx-dev
     - redis
+    - wordpress

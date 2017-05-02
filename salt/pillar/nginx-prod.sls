@@ -90,7 +90,7 @@ nginx:
               - ssl_stapling: "on"
               - ssl_stapling_verify: "on"
               - add_header: Strict-Transport-Security "max-age=15768000; includeSubDomains" always
-              - root: /var/www
+              - root: /var/www/html/sitename
               - index:
                 - index.php
                 - index.html
