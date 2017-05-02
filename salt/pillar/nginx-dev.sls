@@ -4,7 +4,7 @@
 # https://github.com/saltstack-formulas/nginx-formula
 # To Do:
 #     * Find away of removing the duplication of phpVersion in the nginx and php pillars.
-{% set phpVersion = salt['cmd.shell']('cat /srv/pillar/php.sls | grep -E "phpVersion: " | sed "s/.*: //g" | sed "s/ //g"') %}
+{% from "php.sls" import phpVersion as phpVersion %}
 nginx:
   ng:
     # PPA install

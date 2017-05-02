@@ -58,8 +58,8 @@ Vagrant.configure('2') do |config|
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
   # your network.
-  #config.vm.network "public_network", type: "dhcp"
-  config.vm.network "private_network", type: "dhcp"
+  config.vm.network "public_network", type: "dhcp"
+  #config.vm.network "private_network", type: "dhcp"
 
   config.vm.hostname = "www.localdomain"
 
@@ -163,13 +163,13 @@ Vagrant.configure('2') do |config|
     # Don't sync the local package cache...
     override.vm.synced_folder '.pkgcache', '/var/cache/yum/x86_64/7', disabled: true
     # Use rsync to sync folders...
-    override.vm.synced_folder 'salt/conf', '/tmp/salt/conf', type: 'rsync', rsync__args: ["--verbose", "--archive", "--delete", "-z"]
-    override.vm.synced_folder 'salt/roots/', '/srv/salt/', type: 'rsync', rsync__args: ["--verbose", "--archive", "--delete", "-z"]
-    override.vm.synced_folder 'salt/pillar', '/srv/pillar', type: 'rsync', rsync__args: ["--verbose", "--archive", "--delete", "-z"]
-    override.vm.synced_folder 'salt/formulas', '/srv/formulas', type: 'rsync', rsync__args: ["--verbose", "--archive", "--delete", "-z"]
-    override.vm.synced_folder 'www/html', '/var/www', type: 'rsync', owner: 'root', group: 'root', rsync__exclude: 'vendor/', rsync__args: ["--verbose", "--archive", "--delete", "-z"]
-    override.vm.synced_folder '.private', '/root/.private', owner: 'root', group: 'root', rsync__args: ["--verbose", "--archive", "--delete", "-z"]
-    override.vm.synced_folder '.private/letsencrypt-etc/', '/etc/letsencrypt', type: 'rsync', owner: 'root', group: 'root', rsync__args: ["--verbose", "--archive", "--delete", "-z"]
+    override.vm.synced_folder 'salt/conf', '/tmp/salt/conf', type: 'rsync', rsync__args: ["--verbose", "--progress", "--archive", "--delete", "-z"]
+    override.vm.synced_folder 'salt/roots/', '/srv/salt/', type: 'rsync', rsync__args: ["--verbose", "--progress", "--archive", "--delete", "-z"]
+    override.vm.synced_folder 'salt/pillar', '/srv/pillar', type: 'rsync', rsync__args: ["--verbose", "--progress", "--archive", "--delete", "-z"]
+    override.vm.synced_folder 'salt/formulas', '/srv/formulas', type: 'rsync', rsync__args: ["--verbose", "--progress", "--archive", "--delete", "-z"]
+    override.vm.synced_folder 'www/html', '/var/www', type: 'rsync', owner: 'root', group: 'root', rsync__args: ["--verbose", "--progress", "--archive", "--delete", "-z"]
+    override.vm.synced_folder '.private', '/root/.private', owner: 'root', group: 'root', rsync__args: ["--verbose", "--progress", "--archive", "--delete", "-z"]
+    override.vm.synced_folder '.private/letsencrypt-etc/', '/etc/letsencrypt', type: 'rsync', owner: 'root', group: 'root', rsync__args: ["--verbose", "--progress", "--archive", "--delete", "-z"]
 
     # Put the api token in the 'DIGITALOCEAN_TOKEN' environment variable or replace the string
     # below with a string containing the API token to use.
