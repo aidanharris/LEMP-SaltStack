@@ -1,5 +1,5 @@
 {% set dbuser = 'root' %}
-{% set dbpass = salt['cmd.shell']('cat /srv/pillar/mysql.sls | grep -E "root_password: " | sed "s/.*: //g" | sed "s/ //g"') %}
+{% from "mysql.sls" import root_password as dbpass %}
 
 wordpress:
     lookup:
